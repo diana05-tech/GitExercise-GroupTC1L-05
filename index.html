@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Webpage with Settings</title>
+    <style>
+        /* Basic styling for the page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #444;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .settings-btn {
+            background-color: #007bff;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            z-index: 1000; /* Ensure it's above other content */
+        }
+
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -250px; /* Hide initially */
+            width: 250px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+            transition: right 0.3s ease;
+            z-index: 999; /* Ensure it's above other content */
+        }
+
+        .settings-panel.show {
+            right: 0; /* Slide in */
+        }
+
+        .settings-panel h2 {
+            margin: 0;
+            padding: 20px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+        }
+
+        .settings-panel button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background: none;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .settings-panel button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .light-mode {
+            background-color: white;
+            color: black;
+        }
+
+        .dark-mode {
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Recipe Box</h1>
+
+    <!-- Settings Button -->
+    <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel">
+        <h2>Theme Settings</h2>
+        <button onclick="changeTheme('light-mode')">Light Mode</button>
+        <button onclick="changeTheme('dark-mode')">Dark Mode</button>
+    </div>
+
+    <script>
+        // Function to toggle visibility of the settings panel
+        function toggleSettings() {
+            const settingsPanel = document.querySelector('.settings-panel');
+            settingsPanel.classList.toggle('show');
+        }
+
+        // Function to change the theme
+        function changeTheme(theme) {
+            document.body.className = theme;
+            localStorage.setItem('theme', theme); // Save the selected theme
+        }
+
+        // Apply saved theme on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light-mode';
+            document.body.className = savedTheme;
+        });
+    </script>
+</body>
+</html>
