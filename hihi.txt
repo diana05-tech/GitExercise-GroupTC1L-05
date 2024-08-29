@@ -1,5 +1,0 @@
-<<<<<<< HEAD
-hehehe
-=======
-hehe
->>>>>>> main
