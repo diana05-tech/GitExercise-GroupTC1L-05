@@ -1,0 +1,257 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %}{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Homepage</title>
+    <style>
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #e480c3;
+            color: white;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .search-form {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            padding: 10px 30px;
+            border-radius: 5px;
+            color: #333;
+            background-color: white;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 16px;
+        }
+
+        .my-account {
+            position: relative;
+        }
+
+        .account-btn {
+            background-color: #14181d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+           
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            min-width: 150px;
+            z-index: 1000;
+        }
+
+        .dropdown.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+            display: flex; 
+            align-items: center; 
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: #e480c3;
+        }
+
+        .dropdown-item i {
+        margin-right: 10px; 
+        font-size: 16px; 
+        }
+
+        
+        .main-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .welcome {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .trending-recipes,
+        .explore-categories {
+            margin-top: 40px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .recipe-list,
+        .category-list {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .recipe-item,
+        .category-item {
+            text-align: center;
+            width: 200px;
+        }
+
+        .recipe-item img,
+        .category-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .recipe-item p,
+        .category-item p {
+            margin-top: 10px;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+
+    
+    <div class="header">
+        <div class="logo">Recipe Box</div>
+        <form action="result.html" method="GET" class="search-form">
+            <div class="search-bar">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" name="query" placeholder="Search recipes" class="search-input">
+            </div>
+        </form>
+        <div class="my-account">
+            <button class="account-btn" onclick="toggleDropdown()">My Account</button>
+            <div class="dropdown" id="dropdown-menu">
+                <div class="dropdown-item">
+                    <i class="fas fa-user"></i> Profile</div>
+                <div class="dropdown-item">
+                    <i class="fa-solid fa-gear"></i> Settings</div>
+                <div class="dropdown-item">
+                    <i class="fas fa-bookmark"></i> Saved Recipes</div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="main-content">
+        <div class="welcome">Welcome to Recipe Box</div>
+        <div class="trending-recipes">
+            <h2 class="section-title">Trending Recipes</h2>
+            <div class="recipe-list">
+                <div class="recipe-item">
+                    <img src="recipe1.jpg" alt="Recipe 1">
+                    <p>Spaghetti Bolognese</p>
+                </div>
+                <div class="recipe-item">
+                    <img src="recipe2.jpg" alt="Recipe 2">
+                    <p>Chicken Curry</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="explore-categories">
+            <h2 class="section-title">Explore by Categories</h2>
+            <div class="category-list">
+                <div class="category-item">
+                    <img src="vegetarian.jpg" alt="Vegetarian">
+                    <p>Vegetarian</p>
+                </div>
+                <div class="category-item">
+                    <img src="desserts.jpg" alt="Desserts">
+                    <p>Desserts</p>
+                </div>
+                <div class="category-item">
+                    <img src="vegan.jpeg" alt="Vegan">
+                    <p>Vegan</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        
+        </div>
+
+       
+    </div>
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+
+    <script>
+        
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdown-menu');
+            dropdown.classList.toggle('show');
+        }
+
+        
+        window.onclick = function(event) {
+            if (!event.target.matches('.account-btn')) {
+                const dropdown = document.getElementById('dropdown-menu');
+                if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+{% endblock %}
