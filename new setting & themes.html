@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Feature</title>
+    <style>
+        /* Basic styling for the body */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            background-size: cover;  /* Ensure background covers the entire screen */
+            background-repeat: no-repeat;  /* Prevent the background image from repeating */
+            background-position: center;  /* Center the background image */
+            background-attachment: fixed; /* Keep background fixed during scroll */
+        }
+
+        /* Settings button styling */
+        .settings-btn {
+            background-color: #14181d;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            position: fixed;
+            top: 20px; /* Align with the hamburger menu */
+            left: 20px; /* Position on the left side */
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            z-index: 1002; /* Ensure it's above the menu and other content */
+        }
+
+        /* Settings panel styling */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            left: -250px; /* Hide initially */
+            width: 250px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+            transition: left 0.3s ease;
+            z-index: 999; /* Ensure it's below the settings button */
+            overflow-y: auto; /* Allow scrolling */
+        }
+
+        .settings-panel.show {
+            left: 0; /* Slide in */
+        }
+
+        .settings-panel h2 {
+            margin: 0;
+            padding: 20px;
+            background-color: #0c0d0d;
+            color: white;
+            text-align: center;
+        }
+
+        .settings-panel button,
+        .settings-panel input[type="color"],
+        .settings-panel input[type="file"] {
+            display: block;
+            width: 90%;
+            margin: 10px auto;
+            padding: 10px;
+            border: none;
+            background: none;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .color-box {
+            width: 50px;
+            height: 50px;
+            margin: 10px auto;
+            cursor: pointer;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            background-color: #ddd;
+        }
+
+        .predefined-background {
+            width: 80px;
+            height: 80px;
+            margin: 5px auto;
+            display: block;
+            cursor: pointer;
+        }
+
+        .light-mode {
+            background-color: white;
+            color: black;
+        }
+
+        .dark-mode {
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Settings button -->
+    <button class="settings-btn" onclick="toggleSettings()">⚙</button>
+
+    <!-- Settings panel -->
+    <div class="settings-panel">
+        <h2>Theme Settings</h2>
+        <button onclick="changeTheme('light-mode')">Light Mode</button>
+        <button onclick="changeTheme('dark-mode')">Dark Mode</button>
+
+        <h2>Background Settings</h2>
+
+        <!-- Color Box for Background Color -->
+        <div class="color-box" onclick="document.getElementById('background-color-picker').click();"></div>
+        <input type="color" id="background-color-picker" style="display: none;" onchange="changeBackgroundColor(event)">
+
+        <!-- Upload Custom Background -->
+        <input type="file" id="background-upload" accept="image/*" onchange="uploadBackground(event)">
+
+        <!-- Predefined background images -->
+        <h3>Choose Predefined Background</h3>
+        <img src="background1.jpg" class="predefined-background" onclick="setPredefinedBackground('background1.jpg')" alt="Background 1">
+        <img src="background2.webp" class="predefined-background" onclick="setPredefinedBackground('background2.webp')" alt="Background 2">
+        <img src="background3.avif" class="predefined-background" onclick="setPredefinedBackground('background3.avif')" alt="Background 3">
+    </div>
+
+    <script>
+        // Function to toggle the settings panel visibility
+        function toggleSettings() {
+            const settingsPanel = document.querySelector('.settings-panel');
+            settingsPanel.classList.toggle('show');
+        }
+
+        // Function to change the theme (light or dark)
+        function changeTheme(theme) {
+            document.body.className = theme;
+            localStorage.setItem('theme', theme)
+        }
+
+        // Function to change the background color
+        function changeBackgroundColor(event) {
+            document.body.style.backgroundColor = event.target.value;
+            document.body.style.backgroundImage = 'none'; // Remove any background image
+            localStorage.setItem('backgroundColor', color); // Save background color to localStorage
+            localStorage.removeItem('backgroundImage')
+        }
+
+        // Function to upload a custom background image
+        function uploadBackground(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.body.style.backgroundImage = `url(${e.target.result})`;
+                    document.body.style.backgroundColor = 'transparent'; // Remove any background color
+                    localStorage.setItem('backgroundImage', imageUrl); // Save background image to localStorage
+                    localStorage.removeItem('backgroundColor')
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Function to set a predefined background image
+        function setPredefinedBackground(image) {
+            document.body.style.backgroundImage = `url(${image})`;
+            document.body.style.backgroundColor = 'transparent'; // Remove any background color
+            localStorage.setItem('backgroundImage', image); // Save background image to localStorage
+            localStorage.removeItem('backgroundColor');
+        }
+        function loadSettings() {
+            const theme = localStorage.getItem('theme');
+            const backgroundColor = localStorage.getItem('backgroundColor');
+            const backgroundImage = localStorage.getItem('backgroundImage');
+
+            if (theme) {
+                document.body.className = theme;
+            }
+
+            if (backgroundColor) {
+                document.body.style.backgroundColor = backgroundColor;
+                document.body.style.backgroundImage = 'none'; // Remove any background image
+            }
+
+            if (backgroundImage) {
+                document.body.style.backgroundImage = `url(${backgroundImage})`;
+                document.body.style.backgroundColor = 'transparent'; // Remove any background color
+            }
+        }
+
+        // Load settings on page load
+        window.onload = loadSettings;
+    </script>
+
+</body>
+</html>
+
