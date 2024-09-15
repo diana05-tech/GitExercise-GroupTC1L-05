@@ -1,257 +1,128 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %}{% block content %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Homepage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        
-        body {
-            font-family: 'Arial', sans-serif;
+        body, html {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            color: rgb(0, 0, 0);
+            text-align: center;
+            overflow: hidden;
         }
 
-        
-        .header {
+        .parallax-container {
+            height: 100vh;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            background-color: #e480c3;
-            color: white;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .search-form {
-            flex: 1;
-            display: flex;
             justify-content: center;
-        }
-
-        .search-bar {
             position: relative;
-            width: 100%;
-            max-width: 400px;
+            overflow: hidden;
         }
 
-        .search-input {
-            width: 100%;
-            border: none;
-            outline: none;
-            font-size: 16px;
-            padding: 10px 30px;
-            border-radius: 5px;
-            color: #333;
-            background-color: white;
-        }
-
-        .search-icon {
+        /* background */
+        .parallax {
             position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #aaa;
-            font-size: 16px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-position: center;
+            background-size: cover;
+            z-index: -1;
         }
 
-        .my-account {
-            position: relative;
+        .parallax video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
         }
 
-        .account-btn {
-            background-color: #14181d;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-           
+        /* middle typing effect content */
+        .content {
+            z-index: 1;
         }
 
-        .dropdown {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: #fff;
-            color: #333;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            min-width: 150px;
-            z-index: 1000;
+        .typing-animation {
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: .15em solid orange; /* Typing cursor */
+            animation: typing 4s steps(40, end), blink-caret .75s step-end infinite;
         }
 
-        .dropdown.show {
-            display: block;
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
         }
 
-        .dropdown-item {
-            padding: 10px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-            cursor: pointer;
-            display: flex; 
-            align-items: center; 
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: orange; }
         }
 
-        .dropdown-item:last-child {
-            border-bottom: none;
+        .content h1 {
+            font-size: 100px;
+            margin: 0;
+            padding: 0;
         }
 
-        .dropdown-item:hover {
-            background-color: #e480c3;
+        .content p {
+            font-size: 1.2em;
+            margin-top: 20px;
         }
 
-        .dropdown-item i {
-        margin-right: 10px; 
-        font-size: 16px; 
-        }
-
-        
-        .main-content {
-            padding: 20px;
-            text-align: center;
-        }
-
-        .welcome {
-            font-size: 28px;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .trending-recipes,
-        .explore-categories {
+        /* explore css */
+        .explore-btn {
+            display: inline-block;
             margin-top: 40px;
+            padding: 15px 30px;
+            font-size: 1em;
+            color: rgb(255, 243, 243);
+            background-color: #14181d;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
         }
 
-        .section-title {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #333;
+        .explore-btn:hover {
+            background-color: #ae98ff;
         }
 
-        .recipe-list,
-        .category-list {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .recipe-item,
-        .category-item {
-            text-align: center;
-            width: 200px;
-        }
-
-        .recipe-item img,
-        .category-item img {
-            width: 100%;
-            height: auto;
-            border-radius: 5px;
-        }
-
-        .recipe-item p,
-        .category-item p {
-            margin-top: 10px;
-            font-size: 1.1em;
-        }
     </style>
 </head>
 <body>
 
-    
-    <div class="header">
-        <div class="logo">Recipe Box</div>
-        <form action="result.html" method="GET" class="search-form">
-            <div class="search-bar">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" name="query" placeholder="Search recipes" class="search-input">
-            </div>
-        </form>
-        <div class="my-account">
-            <button class="account-btn" onclick="toggleDropdown()">My Account</button>
-            <div class="dropdown" id="dropdown-menu">
-                <div class="dropdown-item">
-                    <i class="fas fa-user"></i> Profile</div>
-                <div class="dropdown-item">
-                    <i class="fa-solid fa-gear"></i> Settings</div>
-                <div class="dropdown-item">
-                    <i class="fas fa-bookmark"></i> Saved Recipes</div>
-            </div>
+    <div class="parallax-container">
+        <!-- background video -->
+        <div class="parallax">
+            <video autoplay muted loop>
+                <source src="{{ url_for('static', filename='videos/backgroundvideomainpg.mp4') }}"type="video/mp4">
+                <!-- image for background -->
+                <img src="backgroundimagemain.jpg" alt="Background Image">
+            </video>
+        </div>
+
+        <div class="content">
+            <h1 class="logo typing-animation">Say Hello to Recipe Box</h1>
+            <p>Cook, Savor, Share: Your Culinary Adventure Starts Here</p>
+            <a href="{{ url_for('views.index') }}"  class="explore-btn">Explore</a>
         </div>
     </div>
 
-
-    <div class="main-content">
-        <div class="welcome">Welcome to Recipe Box</div>
-        <div class="trending-recipes">
-            <h2 class="section-title">Trending Recipes</h2>
-            <div class="recipe-list">
-                <div class="recipe-item">
-                    <img src="recipe1.jpg" alt="Recipe 1">
-                    <p>Spaghetti Bolognese</p>
-                </div>
-                <div class="recipe-item">
-                    <img src="recipe2.jpg" alt="Recipe 2">
-                    <p>Chicken Curry</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="explore-categories">
-            <h2 class="section-title">Explore by Categories</h2>
-            <div class="category-list">
-                <div class="category-item">
-                    <img src="vegetarian.jpg" alt="Vegetarian">
-                    <p>Vegetarian</p>
-                </div>
-                <div class="category-item">
-                    <img src="desserts.jpg" alt="Desserts">
-                    <p>Desserts</p>
-                </div>
-                <div class="category-item">
-                    <img src="vegan.jpeg" alt="Vegan">
-                    <p>Vegan</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-        
-        </div>
-
-       
-    </div>
-
-  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
-
-    <script>
-        
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdown-menu');
-            dropdown.classList.toggle('show');
-        }
-
-        
-        window.onclick = function(event) {
-            if (!event.target.matches('.account-btn')) {
-                const dropdown = document.getElementById('dropdown-menu');
-                if (dropdown.classList.contains('show')) {
-                    dropdown.classList.remove('show');
-                }
-            }
-        }
-    </script>
 </body>
 </html>
 
-
 {% endblock %}
+
+
