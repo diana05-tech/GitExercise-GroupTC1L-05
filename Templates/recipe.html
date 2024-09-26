@@ -61,13 +61,67 @@
         .instructions ol {
             padding-left: 20px; /* Add some padding to the left */
         }
+
+        /* Comment Section Styles */
+        .comment-section {
+            margin-top: 50px;
+            text-align: left;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        .comment-form button {
+            padding: 10px 20px;
+            background-color: #337e7a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .comment-form button:hover {
+            background-color: #285f5b;
+        }
+
+        .comment-list {
+            margin-top: 30px;
+        }
+
+        .comment-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .comment-item h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .comment-item p {
+            color: #666;
+        }
     </style>
 </head>
 <body>
 
     <h1 class="recipe-title">{{ recipe.title }}</h1>
 
-    <a href="{{ url_for('index') }}" class="back-link">&larr; Back to Search</a>
+    <a href="{{ url_for('result', query=query) }}" class="back-link">&larr; Back to Search</a>
 
     <div class="recipe-details">
         <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
@@ -95,5 +149,74 @@
         {% endif %}
     </div>
 
+    <!-- Comment section -->
+    <div class="comment-section">
+        <h2>Comments</h2>
+        
+        <!-- Comment Form -->
+        <div class="comment-form">
+            <textarea id="commentInput" placeholder="Write your comment here..." rows="4"></textarea>
+            <button onclick="submitComment()">Submit Comment</button>
+        </div>
+
+        <!-- List of comments -->
+        <div class="comment-list" id="commentList">
+            <!-- Comments will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        const recipeId = "{{ recipe.id }}"; // Get the current recipe ID
+
+        function submitComment() {
+            const commentInput = document.getElementById('commentInput');
+            const commentText = commentInput.value.trim();
+
+            if (commentText !== '') {
+                const comment = {
+                    text: commentText,
+                    date: new Date().toLocaleString(),
+                    recipeId: recipeId // Include the recipe ID in the comment
+                };
+
+                let comments = JSON.parse(localStorage.getItem('comments')) || {};
+                if (!comments[recipeId]) {
+                    comments[recipeId] = []; // Initialize array for this recipe ID
+                }
+                comments[recipeId].push(comment);
+                localStorage.setItem('comments', JSON.stringify(comments));
+
+                displayComments();
+                commentInput.value = '';
+            } else {
+                alert("Please write a comment before submitting.");
+            }
+        }
+
+        function displayComments() {
+            const commentList = document.getElementById('commentList');
+            commentList.innerHTML = ''; 
+
+            const comments = JSON.parse(localStorage.getItem('comments')) || {};
+            const recipeComments = comments[recipeId] || []; // Get comments for the current recipe ID
+
+            recipeComments.forEach(comment => {
+                const commentItem = document.createElement('div');
+                commentItem.classList.add('comment-item');
+
+                commentItem.innerHTML = `
+                    <h3>Anonymous</h3>
+                    <p>${comment.text}</p>
+                    <small>${comment.date}</small>
+                `;
+
+                commentList.appendChild(commentItem);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            displayComments();
+        });
+    </script>
 </body>
 </html>
