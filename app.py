@@ -9,11 +9,9 @@ SPOONACULAR_API_KEY = 'c445af8099a14368a0547bd7a5b8c3e5'
 SPOONACULAR_API_URL = 'https://api.spoonacular.com/recipes/complexSearch'
 SPOONACULAR_RECIPE_INFO_URL = 'https://api.spoonacular.com/recipes/{id}/information'
 
-
 @app.route('/')
 def index():
     return render_template('index.html')
-
 
 @app.route('/result')
 def result():
@@ -40,7 +38,6 @@ def result():
 
     return render_template('result.html', query=query, recipes=recipes)
 
-
 @app.route('/recipe/<int:recipe_id>')
 def recipe_details(recipe_id):
     # Make a request to Spoonacular API for detailed recipe information
@@ -54,7 +51,6 @@ def recipe_details(recipe_id):
         recipe = None
 
     return render_template('recipe.html', recipe=recipe)
-
 
 if __name__ == '__main__':
     webbrowser.open('http://127.0.0.1:5000/')
