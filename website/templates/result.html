@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <style>
+        body {
+            font-family: 'Broadway', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            transition: background-image 0.3s ease;
+        }
+
+        a {
+            color: #337e7a; /* Black color for all links */
+            text-decoration: none; /* Remove underline */
+        }
+
+        a:hover {
+            color: #333; /* Slightly lighter black or grey for hover effect */
+            text-decoration: underline; /* Underline on hover */
+        }
+
+        h1 {
+            color: #444;
+        }
+
+        .recipe-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 0;
+            list-style: none;
+        }
+        .recipe-item {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 300px;
+            text-align: left;
+            transition: transform 0.2s;
+        }
+        .recipe-item:hover {
+            transform: translateY(-5px);
+        }
+        .recipe-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .recipe-content {
+            padding: 15px;
+        }
+        .recipe-content h2 {
+            font-size: 20px;
+            margin: 0 0 10px;
+            color: #333;
+        }
+        .recipe-content a {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #337e7a;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .recipe-content a:hover {
+            background-color: #285f5b;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #337e7a;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .message {
+            font-size: 18px;
+            color: #666;
+            margin-top: 50px;
+        }
+
+        .settings-btn {
+            background-color: #14181d;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            position: fixed;
+            top: 20px; /* Align with the hamburger menu */
+            left: 20px; /* Position on the left side */
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            z-index: 1002; /* Ensure it's above the menu and other content */
+        }
+
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            left: -250px; /* Hide initially */
+            width: 235px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+            transition: left 0.3s ease;
+            z-index: 1000; /* Ensure it's below the settings button */
+            overflow-y: auto; /* Allow scrolling */
+        }
+
+        .settings-panel.show {
+            left: 0; /* Slide in */
+        }
+
+        .settings-panel h2 {
+            margin: 0;
+            padding: 20px;
+            background-color: #0c0d0d;
+            color: white;
+            text-align: center;
+        }
+
+        .settings-panel button, .settings-panel input[type="color"], .settings-panel input[type="file"] {
+            display: block;
+            width: 100%;
+            margin: 10px auto;
+            padding: 15px;
+            border: none;
+            background: none;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .settings-panel button:hover, .settings-panel input[type="color"]:hover, .settings-panel input[type="file"]:hover { 
+            background-color: #f0f0f0;
+        }
+
+        .predefined-background {
+            width: 80px;
+            height: 80px;
+            margin: 5px auto;
+            display: block;
+            cursor: pointer;
+        }
+
+        .color-box {
+            width: 50px;
+            height: 50px;
+            margin: 10px auto;
+            cursor: pointer;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .light-mode {
+            background-color: white;
+            color: black;
+        }
+
+        .dark-mode {
+            background-color: black;
+            color: white;
+        }
+
+        /* Hamburger Icon Styles */
+        .hamburger {
+            width: 35px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            position: fixed;
+            top: 20px; 
+            right: 20px; 
+            z-index: 1001; 
+        }
+
+        .bar {
+            width: 100%;
+            height: 4px;
+            background-color: black;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu {
+            display: none;
+            flex-direction: column;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 100%;
+            background-color: white;
+            color: black;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+            z-index: 1000; 
+            transition: transform 0.3s ease;
+            transform: translateX(100%); 
+        }
+
+        .nav-menu li {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-menu.active {
+            display: flex;
+            transform: translateX(0); 
+        }
+
+        .nav-menu a {
+            display: block;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            background-color: #202326;
+        }   
+
+        .hamburger.active .bar:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active .bar:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active .bar:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Results for "{{ query }}"</h1>
+
+    <a href="{{ url_for('views.index') }}" class="back-link">&larr; Back to Search</a>
+
+    <button class="settings-btn" onclick="toggleSettings()">⚙</button>
+
+    <div class="hamburger" onclick="toggleMenu()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+    <ul class="nav-menu">
+        <li><a href="{{ url_for('views.index') }}">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Favourites</a></li>
+    </ul>
+
+{% if error %}
+    <p class="message">{{ error }}</p>
+{% elif recipes %}
+    <ul class="recipe-list">
+        {% for recipe in recipes %}
+            <li class="recipe-item">
+                <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+                <div class="recipe-content">
+                    <h2>{{ recipe.title }}</h2>
+                    <a href="{{ url_for('views.recipe_details', recipe_id=recipe.id) }}" target="_blank">View Recipe</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p class="message">No recipes found for "{{ query }}". Please try a different search term.</p>
+{% endif %}
+
+
+    <div class="settings-panel">
+        <h2>Theme Settings</h2>
+        <button onclick="changeTheme('light-mode')">Light Mode</button>
+        <button onclick="changeTheme('dark-mode')">Dark Mode</button>
+
+        <h2>Background Settings</h2>
+
+        <!-- Color Box for Background Color -->
+        <div class="color-box" id="colorBox" onclick="document.getElementById('background-color-picker').click();"></div>
+        <input type="color" id="background-color-picker" style="display: none;" onchange="changeBackgroundColor(event)">
+
+        <!-- Upload Custom Background -->
+        <input type="file" id="background-upload" accept="image/*" onchange="uploadBackground(event)">
+
+        <!-- Predefined background images -->
+        <h3>Choose Predefined Background</h3>
+        <img src="{{ url_for('static', filename='images/background1.jpg') }}" class="predefined-background" onclick="setPredefinedBackground('/static/images/background1.jpg')" alt="Background 1">
+        <img src="{{ url_for('static', filename='images/background2.webp') }}" class="predefined-background" onclick="setPredefinedBackground('/static/images/background2.webp')" alt="Background 2">
+        <img src="{{ url_for('static', filename='images/background3.avif') }}" class="predefined-background" onclick="setPredefinedBackground('/static/images/background3.avif')" alt="Background 3">
+    </div>
+
+    <script>
+        // Function to toggle visibility of the settings panel
+        function toggleSettings() {
+            const settingsPanel = document.querySelector('.settings-panel');
+            settingsPanel.classList.toggle('show');
+        }
+
+        function toggleMenu() {
+            const navMenu = document.querySelector('.nav-menu');
+            const hamburger = document.querySelector('.hamburger');
+            navMenu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        // Function to change the theme
+        function changeTheme(theme) {
+            document.body.className = theme;
+            localStorage.setItem('theme', theme); // Save theme to localStorage
+        }
+
+        function changeBackgroundColor(event) {
+            document.body.style.backgroundColor = event.target.value;
+            document.body.style.backgroundImage = 'none'; // Remove any background image
+            localStorage.setItem('backgroundColor', event.target.value); // Save background color to localStorage
+            localStorage.removeItem('backgroundImage'); // Remove any background image from localStorage
+        }
+
+        function uploadBackground(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.body.style.backgroundImage =  `url('${imageUrl}')`;
+                    document.body.style.backgroundColor = 'transparent'; // Remove any background color
+                    localStorage.setItem('backgroundImage', e.target.result); // Save background image to localStorage
+                    localStorage.removeItem('backgroundColor'); // Remove any background color from localStorage
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function setPredefinedBackground(imageUrl) {
+            document.body.style.backgroundImage = url(${imageUrl});
+            document.body.style.backgroundColor = 'transparent'; // Remove any background color
+            localStorage.setItem('backgroundImage', imageUrl); // Save background image to localStorage
+            localStorage.removeItem('backgroundColor'); // Remove any background color from localStorage
+        }
+
+       // Apply saved settings on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light-mode';
+            document.body.className = savedTheme;
+            const savedBackgroundColor = localStorage.getItem('backgroundColor');
+            if (savedBackgroundColor) {
+                document.body.style.backgroundColor = savedBackgroundColor;
+                document.body.style.backgroundImage = 'none'; // Remove any background image
+            }
+
+            const savedBackgroundImage = localStorage.getItem('backgroundImage');
+            if (savedBackgroundImage) {
+                document.body.style.backgroundImage = url(${savedBackgroundImage});
+                document.body.style.backgroundColor = 'transparent'; // Remove any background color
+            }
+
+        });
+    </script>
+</body>
+</html>
