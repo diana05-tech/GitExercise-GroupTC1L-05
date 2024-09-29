@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ recipe.title }}</title>
+    <style>
+        body {
+            font-family: 'Roboto', 'Arial' sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            transition: background-image 0.3s ease;
+        }
+
+        a {
+            color: #337e7a;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #333;
+            text-decoration: underline;
+        }
+
+        h1 {
+            color: #444;
+        }
+
+        .recipe-title {
+            text-align: center;
+        }
+
+        .recipe-details {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .recipe-details img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+        }
+
+        .ingredients, .instructions {
+            margin-top: 20px;
+            text-align: left;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+        }
+
+        /* rating */
+        .star-rating {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .star-rating input[type="radio"] {
+            display: none;
+        }
+
+        .star-rating label {
+            font-size: 2rem;
+            color: #ccc;
+            cursor: pointer;
+        }
+
+        .star-rating input[type="radio"]:checked ~ label {
+            color: #ffc700;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #ffc700;
+        }
+
+        /* dropdown for difficulty */
+        .review-section {
+            margin-top: 20px;
+        }
+
+        .difficulty-level {
+            margin: 10px 0;
+        }
+
+        .thank-you-message {
+            display: none;
+            margin-top: 20px;
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 class="recipe-title">{{ recipe.title }}</h1>
+
+    <a href="{{ url_for('views.index') }}" class="back-link">&larr; Back to Search</a>
+
+    <div class="recipe-details">
+        <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+        <!-- Favorite Button -->
+        <form action="{{ url_for('views.add_to_favorites', recipe_id=recipe.id) }}" method="POST">
+            <button type="submit" class="favorite-button">Add to Favorites</button>
+        </form>
+ <!-- Scale Recipe Form -->
+ <h2>Scale Recipe</h2>
+ <form action="{{ url_for('views.scale_recipe', recipe_id=recipe.id) }}" method="POST">
+     <label for="scaling_factor">Scaling Factor:</label>
+     <input type="number" id="scaling_factor" name="scaling_factor" min="1" step="1" value="1" required>
+     <button type="submit">Scale Recipe</button>
+ </form>
+ <h2>Scaled Ingredients (for {{ scaling_factor }} servings)</h2>
+ <ul>
+     {% for ingredient in recipe.scaled_ingredients %}
+         <li>{{ ingredient.amount }} {{ ingredient.unit }} of {{ ingredient.name }}</li>
+     {% endfor %}
+ </ul>
+        <!-- Nutritional Information -->
+        <h2>Nutritional Information</h2>
+        <ul>
+            <li>Calories: {{ recipe['nutrition']['nutrients'][0]['amount'] }} {{ recipe['nutrition']['nutrients'][0]['unit'] }}</li>
+            <li>Fat: {{ recipe['nutrition']['nutrients'][1]['amount'] }} {{ recipe['nutrition']['nutrients'][1]['unit'] }}</li>
+            <li>Protein: {{ recipe['nutrition']['nutrients'][2]['amount'] }} {{ recipe['nutrition']['nutrients'][2]['unit'] }}</li>
+        </ul>
+
+        <div class="ingredients">
+            <h2>Ingredients</h2>
+            <ul>
+                {% for ingredient in recipe.extendedIngredients %}
+                    <li>{{ ingredient.original }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="instructions">
+        <h2>Instructions</h2>
+        {% if recipe.analyzedInstructions and recipe.analyzedInstructions[0].steps %}
+            <ol>
+                {% for step in recipe.analyzedInstructions[0].steps %}
+                    <li>{{ step.step }}</li>
+                {% endfor %}
+            </ol>
+        {% else %}
+            <p>No instructions available for this recipe.</p>
+        {% endif %}
+    </div>
+
+    <div class="review-section">
+        <h2>Leave a Review</h2>
+        <form id="reviewForm">
+            <div class="star-rating">
+                <input type="radio" id="5-stars" name="rating" value="5">
+                <label for="5-stars">&#9733;</label>
+                <input type="radio" id="4-stars" name="rating" value="4">
+                <label for="4-stars">&#9733;</label>
+                <input type="radio" id="3-stars" name="rating" value="3">
+                <label for="3-stars">&#9733;</label>
+                <input type="radio" id="2-stars" name="rating" value="2">
+                <label for="2-stars">&#9733;</label>
+                <input type="radio" id="1-star" name="rating" value="1">
+                <label for="1-star">&#9733;</label>
+            </div>
+
+            <div class="difficulty-level">
+                <label for="difficulty">Difficulty Level:</label>
+                <select id="difficulty" name="difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+
+            <button type="submit">Submit Review</button>
+        </form>
+
+        <div class="thank-you-message" id="thankYouMessage">
+            Thanks for the input!
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('reviewForm').addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            document.getElementById('thankYouMessage').style.display = 'block';
+        });
+    </script>
+
+</body>
+</html>

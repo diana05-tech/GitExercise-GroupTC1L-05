@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Your Recipe</title>
+    <style>
+        /* Overall Form Container */
+        .upload-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Form Title */
+        .upload-container h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        /* Form Group Layout */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        /* Form Group Label */
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        /* Input Fields */
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #f9f9f9;
+        }
+
+        /* Upload Image and Video */
+        .upload-media {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            background-color: #fafafa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .upload-media input {
+            display: block;
+            margin: 10px auto;
+            font-size: 1rem;
+        }
+
+        /* Placeholder Text for Input */
+        input::placeholder,
+        textarea::placeholder {
+            color: #999;
+        }
+
+        /* Submit Button */
+        .submit-button {
+            background-color: #06161f;
+            color: white;
+            font-size: 1.2rem;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background-color: #c9302c;
+        }
+
+        /* Responsive Design for Smaller Screens */
+        @media (max-width: 600px) {
+            .upload-container {
+                padding: 20px;
+            }
+
+            .upload-container h1 {
+                font-size: 2rem;
+            }
+
+            .submit-button {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-container">
+        <h1>Share Your Amazing Recipe</h1>
+
+        <form action="{{ url_for('upload_recipe') }}" method="POST" enctype="multipart/form-data">
+            <!-- Recipe Title -->
+            <div class="form-group">
+                <label for="title">Recipe Title</label>
+                <input type="text" id="title" name="title" placeholder="Enter your recipe title" required>
+            </div>
+
+            <!-- Upload Image -->
+            <div class="form-group upload-media">
+                <label for="image">Upload a Beautiful Image of Your Dish</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+            </div>
+
+            <!-- Upload Video -->
+            <div class="form-group upload-media">
+                <label for="video">Upload a Video of Your Recipe (optional)</label>
+                <input type="file" id="video" name="video" accept="video/*">
+            </div>
+
+            <!-- Ingredients -->
+            <div class="form-group">
+                <label for="ingredients">Ingredients</label>
+                <textarea id="ingredients" name="ingredients" rows="5" placeholder="List the ingredients" required></textarea>
+            </div>
+
+            <!-- Instructions -->
+            <div class="form-group">
+                <label for="instructions">Instructions</label>
+                <textarea id="instructions" name="instructions" rows="8" placeholder="Write down the preparation steps" required></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <button type="submit" class="submit-button">Submit Recipe</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
