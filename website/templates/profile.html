@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background: linear-gradient(135deg, #003874, #aee6f8); 
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .profile-header h2 {
+        font-size: 2.8em;
+        color: #fff;
+        margin: 0;
+        font-weight: 700;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    /* profile section css*/
+    .profile-container {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        padding: 40px;
+        margin-bottom: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid #ddd;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .profile-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 8px;
+        background: #ff8420;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    .profile-pic {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 6px solid #0277bd;
+        background-color: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-pic img {
+        width: 100%;
+        height: auto;
+        border-radius: 50%;
+    }
+
+    .profile-details {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .profile-details h1 {
+        margin: 0;
+        font-size: 2.4em;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .profile-details p {
+        margin: 10px 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    /* achievement section css */
+    .user-stats {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .stat-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+        max-width: 400px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: #ff8420 ;
+    }
+
+    .stat-card h3 {
+        margin: 0;
+        font-size: 1.8em;
+        color: #0277bd;
+        padding-top: 10px;
+    }
+
+    .stat-card p {
+        margin: 15px 0;
+        font-size: 1.2em;
+        color: #666;
+    }
+
+    /* events section css*/
+    .events-container {
+        margin-top: 40px;
+    }
+
+    .events-container h3 {
+        font-size: 2.4em;
+        color: #fff;
+        margin-bottom: 30px;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .event-card {
+        background: #fffec3;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+        border-left: 8px solid #ff8420;
+        transition: transform 0.3s ease;
+    }
+
+    .event-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .event-card h4 {
+        font-size: 1.6em;
+        color: #333;
+        margin-top: 0;
+    }
+
+    .event-card p {
+        font-size: 1.1em;
+        color: #666;
+        margin: 5px 0;
+    }
+
+    .event-card .event-date {
+        font-weight: bold;
+        color: #0277bd;
+    }
+
+    @media (max-width: 768px) {
+        .user-stats {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .events-container {
+            margin-top: 20px;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="profile-header">
+        <h2>Profile Overview</h2>
+    </div>
+
+    <!-- profile -->
+    <div class="profile-container">
+        <div class="profile-pic">
+            <img src="{{ url_for('static', filename='images/pfpicon.jpg') }}" alt="Profile Picture">
+        </div>
+        <div class="profile-details">
+            <h1>{{ current_user.first_name }} {{ current_user.last_name }}</h1>
+            <p class="bio">{{ current_user.bio }}</p>
+            <p>Email: <strong>{{ current_user.email }}</strong></p>
+            <p>Certified RecipeBox Member</p>
+        </div>
+    </div>
+
+    <!-- user achievement -->
+    <div class="user-stats">
+        <div class="stat-card">
+            <h3>Achievements</h3>
+            <p>No achievements earned yet</p> <!-- Placeholder message for achievements -->
+        </div>
+    </div>
+
+    <!-- upcoming events -->
+    <div class="events-container">
+        <h3>Upcoming Events</h3>
+        <div class="event-card">
+            <h4>Vegan Comfort Food Cooking Masterclass</h4>
+            <p class="event-date">Date: October 15, 2024</p>
+            <p>Discover how to make delicious vegan comfort food that's hearty and satisfying. Learn how to transform plant-based ingredients into classic comfort meals!</p>
+        </div>
+        <div class="event-card">
+            <h4>RecipeBox Special Gourmet Dinner Party</h4>
+            <p class="event-date">Date: November 5, 2024</p>
+            <p>Join us for an exclusive dinner party featuring gourmet dishes prepared by top chefs. A night of fine dining, networking, and culinary excellence awaits!
+            </p>
+        </div>
+        <div class="event-card">
+            <h4>Holiday Desserts Masterclass</h4>
+            <p class="event-date">Date: December 10, 2024</p>
+            <p>Get ready for the holidays with our special baking workshop. Get ready for the holiday season with a special desserts masterclass. Learn how to make classic holiday treats like cookies, pies, and festive cakes!</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

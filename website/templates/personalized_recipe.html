@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Recipe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #e94218, #fcc093); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+            transition: background 0.5s ease; 
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            width: 90%;
+            max-width: 600px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 50px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            color: #ff7e5f;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        select {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+            transition: border-color 0.3s;
+            background-color: #f8f9fa;
+        }
+        select:focus {
+            border-color: #ff7e5f;
+            outline: none;
+        }
+        button {
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        button:hover {
+            background-color: #218838;
+            transform: translateY(-3px);
+        }
+        #recipe {
+            font-size: 1.5em;
+            margin-top: 30px;
+            color: #555;
+            font-weight: bold;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            text-align: center;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+        }
+        
+        @media (min-width: 768px) {
+            .form-group {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            label {
+                flex: 1;
+                margin-bottom: 0;
+            }
+            select {
+                flex: 2;
+                margin-left: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1><i class="fas fa-utensils"></i> Tailored Recipes Just for You</h1>
+
+    <form method="POST">
+        <div class="form-group">
+            <label for="cuisine">Cuisine:</label>
+            <select name="cuisine" id="cuisine" required>
+                <option value="">Select Cuisine</option>
+                <option value="Italian">Italian</option>
+                <option value="Mexican">Mexican</option>
+                <option value="Indian">Indian</option>
+                <option value="Middle-Eastern">Middle-Eastern</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="diet">Diet:</label>
+            <select name="diet" id="diet" required>
+                <option value="">Select Dietary Preference</option>
+                <option value="Vegan">Vegan</option>
+                <option value="Gluten-Free">Gluten-Free</option>
+                <option value="Sugar-Free">Sugar-Free</option>
+                <option value="Heart-Healthy">Heart-Healthy</option>
+                <option value="None">None</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="meal_type">Meal Type:</label>
+            <select name="meal_type" id="meal_type" required>
+                <option value="">Select Meal Type</option>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Dinner">Dinner</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="prep_time">Prep Time:</label>
+            <select name="prep_time" id="prep_time" required>
+                <option value="">Select Preparation Time</option>
+                <option value="Less than 30 minutes">Less than 30 minutes</option>
+                <option value="30-60 minutes">30-60 minutes</option>
+                <option value="More than 60 minutes">More than 60 minutes</option>
+            </select>
+        </div>
+
+        <button type="submit">Get Recipe</button>
+    </form>
+
+    {% if recipe %}
+    <div id="recipe">
+        <p>We recommend: <strong>{{ recipe }}</strong></p>
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

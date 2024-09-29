@@ -1,0 +1,128 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %}{% block content %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            color: rgb(0, 0, 0);
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .parallax-container {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* background */
+        .parallax {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-position: center;
+            background-size: cover;
+            z-index: -1;
+        }
+
+        .parallax video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* middle typing effect content */
+        .content {
+            z-index: 1;
+        }
+
+        .typing-animation {
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: .15em solid orange; /* Typing cursor */
+            animation: typing 4s steps(40, end), blink-caret .75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: orange; }
+        }
+
+        .content h1 {
+            font-size: 100px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .content p {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        /* explore css */
+        .explore-btn {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 15px 30px;
+            font-size: 1em;
+            color: rgb(255, 243, 243);
+            background-color: #14181d;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .explore-btn:hover {
+            background-color: #ae98ff;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="parallax-container">
+        <!-- background video -->
+        <div class="parallax">
+            <video autoplay muted loop>
+                <source src="{{ url_for('static', filename='videos/backgroundvideomainpg.mp4') }}"type="video/mp4">
+                <!-- image for background -->
+                <img src="backgroundimagemain.jpg" alt="Background Image">
+            </video>
+        </div>
+
+        <div class="content">
+            <h1 class="logo typing-animation">Say Hello to Recipe Box</h1>
+            <p>Cook, Savor, Share: Your Culinary Adventure Starts Here</p>
+            <a href="{{ url_for('views.index') }}"  class="explore-btn">Explore</a>
+        </div>
+    </div>
+
+</body>
+</html>
+
+{% endblock %}
+
+

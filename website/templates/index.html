@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome To Recipe Box</title>
+    <style> 
+    
+        body {
+            font-family: 'Broadway', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            transition: background-image 0.3s ease;
+        }
+
+        h1 {
+            color: #444;
+        }
+
+        a {
+            color: #337e7a; /* Black color for all links */
+            text-decoration: none; /* Remove underline */
+        }
+
+        a:hover {
+            color: #333; /* Slightly lighter black or grey for hover effect */
+            text-decoration: underline; /* Underline on hover */
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        /* Account Dropdown Styling */
+        .account-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .account-btn {
+    background-color: #14181d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px; /* Ensure space between property and value */
+}
+
+        .account-dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #f6f0f0;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .account-dropdown-content a {
+            color: rgb(17, 16, 16);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .account-dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .account-dropdown:hover .account-dropdown-content {
+            display: block;
+        }
+
+        .account-dropdown:hover .account-btn {
+            background-color: #121b13;
+        }
+
+
+        .settings-btn {
+            background-color: #14181d;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            position: fixed;
+            top: 20px; /* Align with the hamburger menu */
+            left: 20px; /* Position on the left side */
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            z-index: 1002; /* Ensure it's above the menu and other content */
+        }
+
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            left: -250px; /* Hide initially */
+            width: 235px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+            transition: left 0.3s ease;
+            z-index: 1000; /* Ensure it's below the settings button */
+            overflow-y: auto; /* Allow scrolling */
+        }
+
+        .settings-panel.show {
+            left: 0; /* Slide in */
+        }
+
+        .settings-panel h2 {
+            margin: 0;
+            padding: 20px;
+            background-color: #0c0d0d;
+            color: white;
+            text-align: center;
+        }
+
+        .settings-panel button, .settings-panel input[type="color"], .settings-panel input[type="file"] {
+            display: block;
+            width: 100%;
+            margin: 10px auto;
+            padding: 15px;
+            border: none;
+            background: none;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .settings-panel button:hover, .settings-panel input[type="color"]:hover, .settings-panel input[type="file"]:hover { 
+            background-color: #f0f0f0;
+        }
+
+        .predefined-background {
+            width: 80px;
+            height: 80px;
+            margin: 5px auto;
+            display: block;
+            cursor: pointer;
+        }
+
+        .color-box {
+            width: 50px;
+            height: 50px;
+            margin: 10px auto;
+            cursor: pointer;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .light-mode {
+            background-color: white;
+            color: black;
+        }
+
+        .dark-mode {
+            background-color: black;
+            color: white;
+        }
+
+        /* Hamburger Icon Styles */
+        .hamburger {
+            width: 35px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            position: fixed;
+            top: 20px; 
+            right: 20px; 
+            z-index: 1001; 
+        }
+
+        .bar {
+            width: 100%;
+            height: 4px;
+            background-color: black;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+
+        .nav-menu {
+            display: none;
+            flex-direction: column;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 100%;
+            background-color: white;
+            color: black;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+            z-index: 1000; 
+            transition: transform 0.3s ease;
+            transform: translateX(100%); 
+        }
+
+        .nav-menu li {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-menu.active {
+            display: flex;
+            transform: translateX(0); 
+        }
+
+        .nav-menu a {
+            display: block;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+          background-color: #202326;
+        }   
+
+        .hamburger.active .bar:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active .bar:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active .bar:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #fff;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .search-form {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 100%;
+            border-bottom: 2px solid #ccc;
+            padding: 5px 0;
+        }
+
+        .search-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            padding-left: 30px; /* Space for the search icon */
+            color: #333;
+            background-color: transparent;
+        }
+
+        .search-input::placeholder {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 16px;
+        }
+
+        .recipe-list {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .recipe-item {
+            text-align: center;
+        }
+
+        .recipe-item img {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .featured-recipe {
+            text-align: center;
+        }
+
+        .description {
+            margin-top: 20px;
+            font-size: 1.2em;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 10px;
+        }
+
+        .category-list {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .category-item {
+            text-align: center;
+        }
+
+        .category-item img {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .category-item p {
+            margin-top: 10px;
+            font-size: 1.1em;
+        }
+        .quote-box {
+            margin: 40px auto;
+            max-width: 600px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .quote-box:before {
+            content: '“';
+            font-size: 50px;
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            color: #ccc;
+        }
+
+        .quote-box p {
+            font-size: 20px;
+            font-style: italic;
+            color: #555;
+            margin: 0;
+        }
+
+        .quote-box .author {
+            text-align: right;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Newsletter Form Styling */
+        .newsletter-section {
+            background-color: #f9f9f9;
+            padding: 40px 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 40px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .newsletter-section h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #444;
+        }
+
+        .newsletter-section input[type="email"] {
+            padding: 10px;
+            width: 80%;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .newsletter-section input button {
+            padding: 10px 20px;
+            background-color: #337e7a;
+            color: rgb(250, 250, 250);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .newsletter-section input button:hover {
+            background-color: #2abeb7;
+        }
+    </style>
+</head>
+<body>
+    <button class="settings-btn" onclick="toggleSettings()">⚙</button>
+
+    <div class="hamburger" onclick="toggleMenu()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+    <ul class="nav-menu">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+    <div class="account-dropdown">
+        <button class="account-btn">My Account</button>
+        <div class="account-dropdown-content">
+            <a href="{{ url_for('views.profile') }}">Profile</a>
+            <a href="{{ url_for('views.add_recipe') }}">Add Recipe</a>
+            <a href="{{ url_for('views.favs_recipes') }}">Favs Recipes</a>
+            <a href="{{ url_for('views.personalized_recipe') }}">Personalized Recipe</a>
+        </div>
+    </div>   
+
+    <h1>Welcome to Recipe Box</h1>
+
+    <div class="settings-panel">
+        <h2>Theme Settings</h2>
+        <button onclick="changeTheme('light-mode')">Light Mode</button>
+        <button onclick="changeTheme('dark-mode')">Dark Mode</button>
+
+        <h2>Background Settings</h2>
+
+        <!-- Color Box for Background Color -->
+        <div class="color-box" id="colorBox" onclick="document.getElementById('background-color-picker').click();"></div>
+        <input type="color" id="background-color-picker" style="display: none;" onchange="changeBackgroundColor(event)">
+
+        <!-- Upload Custom Background -->
+        <input type="file" id="background-upload" accept="image/*" onchange="uploadBackground(event)">
+    </div>
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <h1>Get cooking today!</h1>
+    <form action="{{ url_for('views.result') }}" method="GET" class="search-form">
+        <div class="search-bar">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" name="query" placeholder="Search recipes" class="search-input">
+        </div>
+    </form>
+        </div>
+    </div>
+
+<div class="quote-box">
+    <p>"Cooking is like love. It should be entered into with abandon or not at all."</p>
+    <div class="author">– Harriet Van Horne</div>
+</div>
+
+<div class="newsletter-section">
+    <h2>Subscribe to Our Newsletter</h2>
+    <form action="#" method="post">
+        <input type="email" name="email" placeholder="Enter your email">
+        <input type="button" value="Subscribe">
+    </form>
+</div>
+    <script>
+        function toggleSettings() {
+            const settingsPanel = document.querySelector('.settings-panel');
+            settingsPanel.classList.toggle('show');
+        }
+
+        function toggleMenu() {
+            const navMenu = document.querySelector('.nav-menu');
+            const hamburger = document.querySelector('.hamburger');
+            navMenu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        function changeTheme(theme) {
+            document.body.className = theme;
+            localStorage.setItem('theme', theme);
+        }
+
+        function changeBackgroundColor(event) {
+            const color = event.target.value;
+            document.body.style.backgroundColor = color;
+            document.body.style.backgroundImage = 'none'; 
+            localStorage.setItem('backgroundColor', color); 
+            localStorage.removeItem('backgroundImage');
+        }
+
+        function setPredefinedBackground(image) {
+    document.body.style.backgroundImage = url('${image}'); 
+    document.body.style.backgroundColor = 'transparent'; 
+    localStorage.setItem('backgroundImage', image); 
+    localStorage.removeItem('backgroundColor');
+            
+        }
+        function loadSettings() {
+            const theme = localStorage.getItem('theme');
+            const backgroundColor = localStorage.getItem('backgroundColor');
+            const backgroundImage = localStorage.getItem('backgroundImage');
+
+            if (theme) {
+                document.body.className = theme;
+            }
+
+            if (backgroundColor) {
+                document.body.style.backgroundColor = backgroundColor;
+                document.body.style.backgroundImage = 'none'; 
+            }
+
+            if (backgroundImage) {
+                document.body.style.backgroundImage = url('${backgroundImage}');
+                document.body.style.backgroundColor = 'transparent'; 
+            }
+        }
+
+       
+        window.onload = loadSettings;
+        
+    </script>
+</body>
+</html>
