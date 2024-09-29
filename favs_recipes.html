@@ -71,11 +71,11 @@
         {% if favorites %}
             {% for recipe in favorites %}
                 <div class="recipe-card">
-                    <a href="{{ url_for('recipe_details', recipe_id=recipe.id) }}">
+                    <a href="{{ url_for('views.recipe_details', recipe_id=recipe.id) }}">
                         <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
                         <h3>{{ recipe.title }}</h3>
                     </a>
-                    <form action="{{ url_for('remove_favorite', recipe_id=recipe.id) }}" method="POST">
+                    <form action="{{ url_for('views.remove_favorite', recipe_id=recipe.id) }}" method="POST">
                         <button type="submit" class="delete-button">Remove from Favorites</button>
                     </form>
                 </div>
@@ -85,7 +85,7 @@
         {% endif %}
     </div>
 
-    <a href="{{ url_for('index') }}">&larr; Back to Home</a>
+    <a href="{{ url_for('views.index') }}">&larr; Back to Home</a>
 
 </body>
 </html>
