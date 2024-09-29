@@ -660,12 +660,10 @@ def personalized_recipe():
         diet = request.form.get('diet')
         meal_type = request.form.get('meal_type')
         prep_time = request.form.get('prep_time')
-        # Process the data here (e.g., fetch personalized recipes from an API or database)
-        # Let's assume you store the results in a variable called 'personalized_recipes'
-        personalized_recipes = []  # Placeholder for actual recipe data
-        
-        # Return a template with the personalized recipes
-        return render_template('personalized_recipe.html', recipes=personalized_recipes)
+
+        # Fetch the recipe from the dictionary
+        recipe = recipes.get(cuisine, {}).get(diet, {}).get(meal_type, {}).get(prep_time, 'No recipe found for your selection.')
+
+        return render_template('personalized_recipe.html', recipe=recipe, cuisine=cuisine, diet=diet, meal_type=meal_type, prep_time=prep_time)
     
-    # For GET request, return an empty form or a template
-    return render_template('personalized_recipe.html')
+    return render_template('personalized_recipe.html',recipe =None)
