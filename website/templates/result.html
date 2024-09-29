@@ -309,13 +309,6 @@
         <!-- Upload Custom Background -->
         <input type="file" id="background-upload" accept="image/*" onchange="uploadBackground(event)">
 
-        <!-- Predefined background images -->
-        <h3>Choose Predefined Background</h3>
-        <img src="{{ url_for('static', filename='images/background1.jpg') }}" class="predefined-background" onclick="setPredefinedBackground('/static/images/background1.jpg')" alt="Background 1">
-        <img src="{{ url_for('static', filename='images/background2.webp') }}" class="predefined-background" onclick="setPredefinedBackground('/static/images/background2.webp')" alt="Background 2">
-        <img src="{{ url_for('static', filename='images/background3.avif') }}" class="predefined-background" onclick="setPredefinedBackground('/static/images/background3.avif')" alt="Background 3">
-    </div>
-
     <script>
         // Function to toggle visibility of the settings panel
         function toggleSettings() {
@@ -348,7 +341,6 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.body.style.backgroundImage =  `url('${imageUrl}')`;
                     document.body.style.backgroundColor = 'transparent'; // Remove any background color
                     localStorage.setItem('backgroundImage', e.target.result); // Save background image to localStorage
                     localStorage.removeItem('backgroundColor'); // Remove any background color from localStorage
@@ -358,7 +350,6 @@
         }
 
         function setPredefinedBackground(imageUrl) {
-            document.body.style.backgroundImage = url(${imageUrl});
             document.body.style.backgroundColor = 'transparent'; // Remove any background color
             localStorage.setItem('backgroundImage', imageUrl); // Save background image to localStorage
             localStorage.removeItem('backgroundColor'); // Remove any background color from localStorage
@@ -376,7 +367,6 @@
 
             const savedBackgroundImage = localStorage.getItem('backgroundImage');
             if (savedBackgroundImage) {
-                document.body.style.backgroundImage = url(${savedBackgroundImage});
                 document.body.style.backgroundColor = 'transparent'; // Remove any background color
             }
 
