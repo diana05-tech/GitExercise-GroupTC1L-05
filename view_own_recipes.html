@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Recipes</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .recipe {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .recipe img {
+            width: 100px;
+            height: auto;
+            border-radius: 8px;
+        }
+        .recipe h2 {
+            font-size: 1.5rem;
+            color: #06161f;
+            margin: 0;
+        }
+        .recipe p {
+            margin: 5px 0;
+            color: #555;
+        }
+        .view-btn {
+            background-color: #06161f;
+            color: #fff;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        .view-btn:hover {
+            background-color: #333;
+        }
+        .no-recipes {
+            text-align: center;
+            color: #999;
+            font-size: 1.2rem;
+        }
+        .delete-btn {
+            background-color: #ff4d4d;
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .delete-btn:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>My Recipes</h1>
+        {% if recipes %}
+            {% for recipe in recipes %}
+            <div class="recipe">
+                <div class="recipe-info">
+                    <h2>{{ recipe.title }}</h2>
+                    <p>Ingredients: {{ recipe.ingredients }}</p>
+                </div>
+                <img src="{{ url_for('static', filename='images/' + recipe.image) }}" alt="{{ recipe.title }}">
+
+                <!-- Form to delete the recipe -->
+                <form action="{{ url_for('views.delete_recipe', recipe_id=recipe.id) }}" method="POST" style="display: inline-block;">
+                    <button type="submit" class="delete-btn">Delete Recipe</button>
+                </form>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-recipes">You haven't uploaded any recipes yet.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
